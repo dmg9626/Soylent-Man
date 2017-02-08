@@ -15,6 +15,7 @@ public class MoveController : MonoBehaviour
         _moveSpeed = .125F;
         _canJump = false;
         _jumpPower = 10;
+        _player.GetComponent<Rigidbody2D>().freezeRotation = true;
 	}
 	
 	// Update is called once per frame
@@ -46,7 +47,7 @@ public class MoveController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name == "Ground")
+        if (collision.gameObject.tag == "Obstacle")
         {
             if (!_canJump)
             {
