@@ -7,13 +7,15 @@ public class MoveController : MonoBehaviour
     private GameObject _player;
     private float _moveSpeed;
     private float _jumpPower;
-    private bool _canJump;
+    private bool _jumpedOnce;
+    private bool _jumpedTwice;
 	// Use this for initialization
 	private void Start () 
     {
         _player = GameObject.Find("SoylentBottle");
         _moveSpeed = .125F;
-        _canJump = false;
+        _jumpedOnce = true;
+        _jumpedTwice = true;
         _jumpPower = 10;
         _player.GetComponent<Rigidbody2D>().freezeRotation = true;
 	}
@@ -37,11 +39,17 @@ public class MoveController : MonoBehaviour
 
     private void Jump()
     {
-        if(_canJump)
+        if(!_jumpedOnce)
         {
             _player.GetComponent<Rigidbody2D>().velocity += Vector2.up * _jumpPower;
-            _canJump = false;
-            Debug.Log("jumped");
+            _jumpedOnce = true;
+            Debug.Log("jumped once");
+        }
+        else if(!_jumpedTwice)
+        {
+            _player.GetComponent<Rigidbody2D>().velocity += Vector2.up * _jumpPower;
+            _jumpedTwice = true;
+            Debug.Log("jumped twice");
         }
     }
 
@@ -49,9 +57,10 @@ public class MoveController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Obstacle")
         {
-            if (!_canJump)
+            if (_jumpedOnce)
             {
-                _canJump = true;
+                _jumpedOnce = false;
+                _jumpedTwice = false;
                 Debug.Log("landed");
             }
         }
